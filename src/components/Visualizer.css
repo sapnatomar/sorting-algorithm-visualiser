@@ -1,0 +1,26 @@
+.visualizer {
+  margin: 4em;
+  align-items: center;
+}
+
+.array-container {
+  height: 500px;
+  flex-direction: row;
+  align-items: flex-start;
+  display: inline-flex;
+  margin-top: 1em;
+}
+
+.array-bar {
+  display: inline-block;
+  margin: 0 1px;
+}
+
+.actions {
+  margin: 2em auto;
+}
+
+.actions div {
+  display: inline-block;
+  margin: 0 2em;
+}
