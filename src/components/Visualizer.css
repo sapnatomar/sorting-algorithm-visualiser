@@ -1,26 +1,18 @@
-.visualizer {
-  margin: 4em;
-  align-items: center;
+.header Button {
+  margin-left: 1em;
+  margin-right: 1em;
 }
 
 .array-container {
-  height: 500px;
+  min-height: 100vh !important;
   flex-direction: row;
   align-items: flex-start;
   display: inline-flex;
-  margin-top: 1em;
+  margin: 2em auto;
+  flex-wrap: wrap;
 }
 
 .array-bar {
   display: inline-block;
   margin: 0 1px;
-}
-
-.actions {
-  margin: 2em auto;
-}
-
-.actions div {
-  display: inline-block;
-  margin: 0 2em;
 }

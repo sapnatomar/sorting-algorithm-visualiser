@@ -1,19 +1,28 @@
 import React, { Component } from "react";
+import "antd/dist/antd.css";
+import { Layout, Button } from "antd";
 import "./Visualizer.css";
+import CustomizeArrayDrawer from "./CustomizeArrayDrawer.js";
+
+import bubbleSort from "../Algorithms";
+
+const { Header, Content } = Layout;
 
 function randomIntFromInterval(min, max) {
   return Math.floor(Math.random() * (max - min + 1) + min);
 }
 
-export class Visualizer extends Component {
+export default class Visual extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
       array: [],
       size: 100,
-      min_value: 1,
+      min_value: 5,
       max_value: 500,
+      isDrawerVisible: false,
+      isSorting: false,
     };
   }
 
@@ -21,25 +30,31 @@ export class Visualizer extends Component {
     this.generateArray();
   }
 
-  //   setMinvalue = (e) => {
-  //     this.setState({
-  //       min_value: e.target.value,
-  //     });
-
-  //     this.generateArray();
-  //   };
-
-  //   setMaxValue = (e) => {
-  //     this.setState({
-  //       max_value: e.target.value,
-  //     });
-
-  //     this.generateArray();
-  //   };
-
-  setArraySize = (e) => {
+  showDrawer = () => {
     this.setState({
-      size: e.target.value,
+      isDrawerVisible: true,
+    });
+  };
+
+  onClose = () => {
+    this.setState({
+      isDrawerVisible: false,
+    });
+  };
+
+  handleSizeChange = (e) => {
+    this.setState({
+      size: e,
+    });
+
+    this.generateArray();
+  };
+
+  handleValueChange = (e) => {
+    const [x, y] = e;
+    this.setState({
+      min_value: Math.min(x, y),
+      max_value: Math.max(x, y),
     });
 
     this.generateArray();
@@ -55,75 +70,61 @@ export class Visualizer extends Component {
     this.setState({ array });
   };
 
+  handleSort = () => {
+    //this.setState({ isSorting: true });
+    const array = document.querySelectorAll(".array-bar");
+    bubbleSort(array);
+  };
+
   render() {
-    const { array, size, min_value, max_value } = this.state;
+    const {
+      array,
+      size,
+      min_value,
+      max_value,
+      isDrawerVisible,
+      isSorting,
+    } = this.state;
 
     return (
-      <div className="visualizer">
-        <div className="actions">
-          <div>
-            <label name="size">Size of Array: </label> <br />
-            <input
-              type="range"
-              name="array_size"
-              className="size-slider"
-              min="5"
-              max="400"
-              step="1"
-              value={size}
-              onChange={this.setArraySize}
-            ></input>
-          </div>
+      <Layout>
+        <Header className="header">
+          <Button onClick={this.generateArray} disabled={isSorting}>
+            Generate New Array
+          </Button>
+          <Button type="dashed" onClick={this.showDrawer} disabled={isSorting}>
+            Customize Array
+          </Button>
+          <Button type="primary" onClick={this.handleSort}>
+            Sort
+          </Button>
+        </Header>
+        <Layout className="layout">
+          <Content className="array-container" style={{ padding: "0 50px" }}>
+            {array.map((value, index) => (
+              <div
+                className="array-bar"
+                key={index}
+                style={{
+                  backgroundColor: "#444",
+                  height: `${(value / max_value) * 500}px`,
+                  width: `${Math.min(50, 800 / size)}px`,
+                }}
+              ></div>
+            ))}
+          </Content>
 
-          {/* <div>
-            <label name="min_value">Min value of elements: </label> <br />
-            <input
-              type="range"
-              name="array_min_value"
-              className="min-value-slider"
-              min="1"
-              max="200"
-              step="1"
-              value={min_value}
-              onChange={this.setMinvalue}
-            ></input>
-          </div>
-
-          <div>
-            <label name="max_value">Max value of elements: </label> <br />
-            <input
-              type="range"
-              name="array_max_value"
-              className="max-value-slider"
-              min="201"
-              max="500"
-              step="1"
-              value={max_value}
-              onChange={this.setMaxValue}
-            ></input>
-          </div> */}
-
-          <div>
-            <button>Sort</button>
-          </div>
-        </div>
-
-        <div className="array-container">
-          {array.map((value, index) => (
-            <div
-              className="array-bar"
-              key={index}
-              style={{
-                backgroundColor: "#444",
-                height: `${(value / max_value) * 500}px`,
-                width: `${Math.min(50, 800 / size)}px`,
-              }}
-            ></div>
-          ))}
-        </div>
-      </div>
+          <CustomizeArrayDrawer
+            size={size}
+            min_value={min_value}
+            max_value={max_value}
+            visible={isDrawerVisible}
+            onClose={this.onClose}
+            handleValueChange={this.handleValueChange}
+            handleSizeChange={this.handleSizeChange}
+          />
+        </Layout>
+      </Layout>
     );
   }
 }
-
-export default Visualizer;
