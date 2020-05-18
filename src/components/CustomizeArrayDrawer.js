@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 
-import { Drawer, Form, Button, Col, Row, Input, Select, Slider } from "antd";
+import { Drawer, Form, Col, Row, Select, Slider, InputNumber } from "antd";
 
 const { Option } = Select;
 
@@ -10,10 +10,14 @@ export class CustomizeArrayDrawer extends Component {
       size,
       min_value,
       max_value,
+      sortMethod,
+      animation_speed,
       visible,
       onClose,
       handleSizeChange,
       handleValueChange,
+      handleAnimationSpeedChange,
+      onSortMethodChange,
     } = this.props;
 
     return (
@@ -27,11 +31,19 @@ export class CustomizeArrayDrawer extends Component {
         <Form layout="vertical" hideRequiredMark>
           <Row gutter={16}>
             <Col span={24}>
-              <Form.Item name="algorithm" label="Sorting Algorithm">
-                <Select placeholder="Select Sorting Algorithm">
-                  <Option value="Merge Sort">Merge Sort</Option>
-                  <Option value="Buttble Sort">Bubble Sort</Option>
+              <Form.Item
+                name="algorithm"
+                label="Sorting Algorithm"
+                initialValue={sortMethod}
+              >
+                <Select
+                  placeholder="Select Sorting Algorithm"
+                  onChange={onSortMethodChange}
+                >
+                  <Option value="Bubble Sort">Bubble Sort</Option>
                   <Option value="Selection Sort">Selection Sort</Option>
+                  <Option value="Insertion Sort">Insertion Sort</Option>
+                  <Option value="Merge Sort">Merge Sort</Option>
                   <Option value="Quick Sort">Quick Sort</Option>
                   <Option value="Heap Sort">Heap Sort</Option>
                 </Select>
@@ -40,27 +52,34 @@ export class CustomizeArrayDrawer extends Component {
           </Row>
           <Row gutter={16}>
             <Col span={24}>
-              <Form.Item name="size" label="Size of Array">
-                <Slider
-                  defaultValue={size}
-                  min={5}
-                  max={400}
-                  step={5}
+              <Form.Item name="size" label="Size of Array" initialValue={size}>
+                <input
+                  type="range"
+                  min="5"
+                  max="400"
+                  value={size}
+                  className="slider"
+                  id="myRange"
+                  onClick={handleSizeChange}
                   onChange={handleSizeChange}
-                  autoFocus={true}
+                  onMouseUp={handleSizeChange}
                 />
               </Form.Item>
             </Col>
           </Row>
           <Row gutter={16}>
             <Col span={24}>
-              <Form.Item name="value_range" label="Range of Array values">
+              <Form.Item
+                name="value_range"
+                label="Range of Array values"
+                initialValue={[min_value, max_value]}
+              >
                 <Slider
                   range
-                  defaultValue={[min_value, max_value]}
                   min={5}
-                  max={600}
+                  max={1000}
                   onChange={handleValueChange}
+                  onAfterChange={handleValueChange}
                   autoFocus={true}
                 />
               </Form.Item>
@@ -69,18 +88,14 @@ export class CustomizeArrayDrawer extends Component {
           <Row gutter={16}>
             <Col span={24}>
               <Form.Item
-                name="description"
-                label="Description"
-                rules={[
-                  {
-                    required: true,
-                    message: "please enter url description",
-                  },
-                ]}
+                name="animation_speed"
+                label="Set Animation Speed"
+                initialValue={animation_speed}
               >
-                <Input.TextArea
-                  rows={4}
-                  placeholder="please enter url description"
+                <InputNumber
+                  min={1}
+                  max={15}
+                  onChange={handleAnimationSpeedChange}
                 />
               </Form.Item>
             </Col>

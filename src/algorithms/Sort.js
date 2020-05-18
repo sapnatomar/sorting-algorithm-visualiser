@@ -1,10 +1,9 @@
 import bubbleSort from "./BubbleSort";
 import selectionSort from "./SelectionSort";
+import insertionSort from "./InsertionSort";
+import quickSort from "./QuickSort";
 // import mergeSort from "./MergeSort";
-// import quickSort from "./QuickSort";
-// import selectionSort from "./SelectionSort";
 // import heapSort from "./HeapSort";
-//import insertionSort from "./InsertionSort";
 
 export default function sortArray(array, type) {
   const actions = [];
@@ -14,8 +13,10 @@ export default function sortArray(array, type) {
   } else if (type === "Selection Sort") {
     selectionSort(auxillaryArray, actions);
   } else if (type === "Insertion Sort") {
+    insertionSort(auxillaryArray, actions);
   } else if (type === "Merge Sort") {
   } else if (type === "Quick Sort") {
+    quickSort(auxillaryArray, 0, array.length - 1, actions);
   } else {
     bubbleSort(auxillaryArray, actions);
   }
