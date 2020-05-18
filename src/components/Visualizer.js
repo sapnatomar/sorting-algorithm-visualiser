@@ -4,13 +4,17 @@ import { Layout, Button } from "antd";
 import "./Visualizer.css";
 import CustomizeArrayDrawer from "./CustomizeArrayDrawer.js";
 
-import bubbleSort from "../Algorithms";
+import sortArray from "../algorithms/Sort.js";
 
 const { Header, Content } = Layout;
 
 function randomIntFromInterval(min, max) {
   return Math.floor(Math.random() * (max - min + 1) + min);
 }
+
+const ANIMATION_SPEED = 3;
+const COLOR1 = "#444";
+const COLOR2 = "red";
 
 export default class Visual extends Component {
   constructor(props) {
@@ -72,8 +76,27 @@ export default class Visual extends Component {
 
   handleSort = () => {
     //this.setState({ isSorting: true });
-    const array = document.querySelectorAll(".array-bar");
-    bubbleSort(array);
+    const actions = sortArray(this.state.array, "Selection Sort");
+
+    for (let i = 0; i < actions.length; i++) {
+      const arrayBar = Array.from(document.querySelectorAll(".array-bar"));
+      const [type, x, y] = actions[i];
+      const bar1 = arrayBar[x];
+
+      if (type !== 1) {
+        const bar2 = arrayBar[y];
+        setTimeout(() => {
+          const color = type === 2 ? COLOR1 : COLOR2;
+          bar1.style.backgroundColor = color;
+          bar2.style.backgroundColor = color;
+        }, i * ANIMATION_SPEED);
+      } else {
+        setTimeout(() => {
+          //bar1.style.color = COLOR2;
+          bar1.style.height = `${y}px`;
+        }, i * ANIMATION_SPEED);
+      }
+    }
   };
 
   render() {
@@ -106,8 +129,8 @@ export default class Visual extends Component {
                 className="array-bar"
                 key={index}
                 style={{
-                  backgroundColor: "#444",
-                  height: `${(value / max_value) * 500}px`,
+                  backgroundColor: `${COLOR1}`,
+                  height: `${value}px`,
                   width: `${Math.min(50, 800 / size)}px`,
                 }}
               ></div>
