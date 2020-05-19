@@ -1,24 +1,18 @@
 import React, { Component } from "react";
 
-import { Drawer, Form, Col, Row, Select, Slider, InputNumber } from "antd";
-
-const { Option } = Select;
+import { Drawer, Form, Col, Row, Slider } from "antd";
 
 export class CustomizeArrayDrawer extends Component {
   render() {
-    const {
-      size,
-      min_value,
-      max_value,
-      sortMethod,
-      animation_speed,
-      visible,
-      onClose,
-      handleSizeChange,
+    const { data, onClose, methods } = this.props;
+
+    const [animation_speed, size, min_value, max_value, visible] = data;
+
+    const [
       handleValueChange,
+      handleSizeChange,
       handleAnimationSpeedChange,
-      onSortMethodChange,
-    } = this.props;
+    ] = methods;
 
     return (
       <Drawer
@@ -31,35 +25,13 @@ export class CustomizeArrayDrawer extends Component {
         <Form layout="vertical" hideRequiredMark>
           <Row gutter={16}>
             <Col span={24}>
-              <Form.Item
-                name="algorithm"
-                label="Sorting Algorithm"
-                initialValue={sortMethod}
-              >
-                <Select
-                  placeholder="Select Sorting Algorithm"
-                  onChange={onSortMethodChange}
-                >
-                  <Option value="Bubble Sort">Bubble Sort</Option>
-                  <Option value="Selection Sort">Selection Sort</Option>
-                  <Option value="Insertion Sort">Insertion Sort</Option>
-                  <Option value="Merge Sort">Merge Sort</Option>
-                  <Option value="Quick Sort">Quick Sort</Option>
-                  <Option value="Heap Sort">Heap Sort</Option>
-                </Select>
-              </Form.Item>
-            </Col>
-          </Row>
-          <Row gutter={16}>
-            <Col span={24}>
               <Form.Item name="size" label="Size of Array" initialValue={size}>
                 <input
                   type="range"
                   min="5"
-                  max="400"
+                  max="350"
                   value={size}
                   className="slider"
-                  id="myRange"
                   onClick={handleSizeChange}
                   onChange={handleSizeChange}
                   onMouseUp={handleSizeChange}
@@ -85,6 +57,7 @@ export class CustomizeArrayDrawer extends Component {
               </Form.Item>
             </Col>
           </Row>
+
           <Row gutter={16}>
             <Col span={24}>
               <Form.Item
@@ -92,10 +65,16 @@ export class CustomizeArrayDrawer extends Component {
                 label="Set Animation Speed"
                 initialValue={animation_speed}
               >
-                <InputNumber
-                  min={1}
-                  max={15}
+                <input
+                  type="range"
+                  min="1"
+                  max="20"
+                  step="1"
+                  value={animation_speed}
+                  className="slider"
+                  onClick={handleAnimationSpeedChange}
                   onChange={handleAnimationSpeedChange}
+                  onMouseUp={handleAnimationSpeedChange}
                 />
               </Form.Item>
             </Col>

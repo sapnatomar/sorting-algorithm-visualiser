@@ -1,80 +1,98 @@
 import React, { Component } from "react";
 import CustomizeArrayDrawer from "./CustomizeArrayDrawer";
-// import Log from "./Log";
-import sortArray from "../algorithms/Sort.js";
+import Log from "./Log";
+import {
+  randomIntFromInterval,
+  COLOR1,
+  COLOR2,
+  sorts,
+  complexity,
+  //arrayDetails,
+  NavbarButtons,
+} from "./Utils/utils.js";
 
-import { Statistic, Card, Row, Col } from "antd";
-import { ArrowUpOutlined } from "@ant-design/icons";
+import sortArray from "../algorithms/Sort.js";
 
 import "./Visualizer.css";
 import "antd/dist/antd.css";
-import { Layout, Button, Select, notification } from "antd";
-import { SmileOutlined } from "@ant-design/icons";
+import { Layout, Button, notification, Menu } from "antd";
+import {
+  MenuUnfoldOutlined,
+  MenuFoldOutlined,
+  SortAscendingOutlined,
+  NotificationOutlined,
+  EditOutlined,
+  BuildOutlined,
+  UnorderedListOutlined,
+} from "@ant-design/icons";
 
-const { Header, Content } = Layout;
-const { Option } = Select;
-const COLOR1 = "#444";
-const COLOR2 = "red";
+const { Header, Sider, Content } = Layout;
+const { SubMenu } = Menu;
 
-const complexity = {
-  "Bubble Sort": "O(n2)",
-  "Selection Sort": "O(n2)",
-  "Insertion Sort": "O(n2)",
-  "Merge Sort": "O(nlog(n))",
-  "Quick Sort": "O(nlog(n))",
-  "Heap Sort": "O(nlog(n))",
-};
-
-export default class Visual extends Component {
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      array: [],
-      size: 50,
-      min_value: 5,
-      max_value: 500,
-      animation_speed: 3,
-      sortMethod: "Bubble Sort",
-      isDrawerVisible: false,
-      isSorting: false,
-      log: [],
-      reset: false,
-    };
-  }
+export default class Visualizer extends Component {
+  state = {
+    array: [],
+    size: 100,
+    min_value: 5,
+    max_value: 800,
+    animation_speed: 3,
+    sortMethod: "Merge Sort",
+    isDrawerVisible: false,
+    isSorting: false,
+    reset: false,
+    log: [],
+    siderCollapsed: false,
+  };
 
   componentDidMount() {
     this.generateArray();
   }
 
-  // show drawer to customize the array
-  showDrawer = () => {
+  clearLog = () => {
+    this.setState({ log: [] });
+  };
+
+  /*********************************************************************************************************************************************
+   *                                                          DISPLAY INSTRUCTIONS
+   *********************************************************************************************************************************************/
+
+  displayInstructions = () => {
+    alert("here are your instructions");
+  };
+
+  /********************************************************************************************************************************************* *
+   *                                                          DRAWER TOGGLE AND SLIDER TOGGLE
+   * **********************************************************************************************************************************************/
+
+  toggleDrawer = () => {
     this.setState({
-      isDrawerVisible: true,
+      isDrawerVisible: !this.state.isDrawerVisible,
     });
   };
 
-  // closes 'customize array' drawer
-  onClose = () => {
+  toggleSider = () => {
     this.setState({
-      isDrawerVisible: false,
+      siderCollapsed: !this.state.siderCollapsed,
     });
   };
 
-  handleReset = () => {
+  /************************************************************************************************************************************************
+   *                                                                  ON CHANGE METHODS
+   *************************************************************************************************************************************************/
+
+  //handler to stop sorting
+  handleStopSort = () => {
     this.setState({ reset: !this.state.reset });
   };
 
-  //chandler to change size of the array
+  //handler to change size of the array
   handleSizeChange = (e) => {
     this.setState({ size: e.target.value });
     this.generateArray();
   };
 
   //handler to change range of value of elements in array
-  handleValueChange = (e) => {
-    const [x, y] = e;
-
+  handleValueChange = ([x, y]) => {
     this.setState({
       min_value: Math.min(x, y),
       max_value: Math.max(x, y),
@@ -85,15 +103,18 @@ export default class Visual extends Component {
 
   //handles change in sort method
   onSortMethodChange = (e) => {
-    this.setState({ sortMethod: e });
+    this.setState({ sortMethod: sorts[e.key] });
   };
 
   //change animation speed
   handleAnimationSpeedChange = (e) => {
-    this.setState({ animation_speed: parseInt(e) });
+    this.setState({ animation_speed: e.target.value });
   };
 
-  //generate a random array
+  /*********************************************************************************************************************************************
+   *                                                        GENERATE RANDOM ARRAY
+   **********************************************************************************************************************************************/
+
   generateArray = () => {
     const array = [];
     const { size, min_value, max_value } = this.state;
@@ -104,22 +125,39 @@ export default class Visual extends Component {
     this.setState({ array });
   };
 
-  openNotification = (sorting_time, size, sortMethod, animation_speed) => {
+  /*********************************************************************************************************************************************
+   *                                                         NOTIFICATION POPUP
+   **********************************************************************************************************************************************/
+
+  openNotification = (description) => {
     notification.open({
       message: "Hurray!",
-      description: `Took ${sorting_time} milliseconds to sort an array of size ${size} using ${sortMethod} when animation speed is ${animation_speed}.`,
-      icon: <SmileOutlined style={{ color: "#108ee9" }} />,
+      description: description,
+      icon: <NotificationOutlined style={{ color: "#108ee9" }} />,
     });
   };
 
-  //main sort handler, animates and sorts the array
-  handleSort = () => {
-    //indicates sorting is about to be performed so disable all other input fields
-    this.setState({ isSorting: true });
-    const { sortMethod, animation_speed, size } = this.state;
-    const actions = sortArray(this.state.array, sortMethod);
+  /************************************************************************************************************************************************
+   *                                                       HANDLE SINGLE AND MULTIPLE SORTS
+   *************************************************************************************************************************************************/
 
-    //actions.map((item) => console.log("item", item));
+  handleSingleSort = () => {
+    //indicates sorting is about to be performed
+    //so disable all other input fields
+    const { sortMethod } = this.state;
+    const actions = sortArray(this.state.array, sortMethod);
+    this.animations(actions, sortMethod);
+  };
+
+  handleMultipleSort = () => {};
+
+  /************************************************************************************************************************************************
+   *                                                                  ANIMATIONS
+   *************************************************************************************************************************************************/
+
+  animations = (actions, sortMethod) => {
+    this.setState({ isSorting: true });
+    const { animation_speed, size, log } = this.state;
 
     for (let i = 0; i < actions.length; i++) {
       const arrayBar = Array.from(document.querySelectorAll(".array-bar"));
@@ -135,26 +173,29 @@ export default class Visual extends Component {
         }, i * animation_speed);
       } else {
         setTimeout(() => {
-          //bar1.style.color = COLOR2;
           bar1.style.height = `${y}px`;
         }, i * animation_speed);
       }
     }
 
-    //reset disabled state of all button to false
     const sorting_time = animation_speed * actions.length;
 
     setTimeout(() => {
-      this.openNotification(sorting_time, size, sortMethod, animation_speed);
-      this.setState({
-        isSorting: false,
-        log: this.state.log.push([
-          sortMethod,
-          size,
-          animation_speed,
-          sorting_time,
-        ]),
+      const messageDescription = `Took ${sorting_time} milliseconds to sort an array of size ${size} using ${sortMethod} when animation speed is ${animation_speed} ms.`;
+      this.openNotification(messageDescription);
+
+      const time_complexity = complexity[sortMethod];
+      const idx = log.length;
+
+      log.push({
+        key: `${idx}`,
+        sort: sortMethod,
+        complexity: time_complexity,
+        N: size,
+        animationSpeed: animation_speed,
+        timetaken: `${sorting_time}ms`,
       });
+      this.setState({ isSorting: false, log: log });
     }, parseInt(sorting_time));
   };
 
@@ -168,53 +209,104 @@ export default class Visual extends Component {
       animation_speed,
       isDrawerVisible,
       isSorting,
+      log,
     } = this.state;
 
-    return (
-      <Layout className="AppContainer">
-        <Header className="header">
-          <Select
-            defaultValue={sortMethod}
-            placeholder="Select Sorting Algorithm"
-            onChange={this.onSortMethodChange}
-            disabled={isSorting}
-          >
-            <Option value="Bubble Sort">Bubble Sort</Option>
-            <Option value="Selection Sort">Selection Sort</Option>
-            <Option value="Insertion Sort">Insertion Sort</Option>
-            <Option value="Merge Sort">Merge Sort</Option>
-            <Option value="Quick Sort">Quick Sort</Option>
-            <Option value="Heap Sort">Heap Sort</Option>
-          </Select>
-          <Button
-            type="ghost"
-            onClick={this.generateArray}
-            disabled={isSorting}
-          >
-            Generate New Array
-          </Button>
-          <Button type="ghost" onClick={this.showDrawer} disabled={isSorting}>
-            Customize Array
-          </Button>
-          <Button
-            className="sort"
-            type="primary"
-            onClick={this.handleSort}
-            disabled={isSorting}
-          >
-            Sort
-          </Button>
-          <Button
-            type="primary"
-            className="sort"
-            onClick={this.handleReset}
-            disabled={!isSorting}
-          >
-            Stop Sort (Broken)
-          </Button>
-        </Header>
+    const displayValue = [
+      sortMethod,
+      complexity[sortMethod],
+      animation_speed,
+      size,
+      min_value,
+      max_value,
+      isDrawerVisible,
+    ];
 
-        <Layout className="layout main-section">
+    const classMethods = [
+      this.generateArray,
+      this.toggleDrawer,
+      this.displayInstructions,
+      this.handleValueChange,
+      this.handleSizeChange,
+      this.handleAnimationSpeedChange,
+    ];
+
+    const icons = [
+      <BuildOutlined />,
+      <EditOutlined />,
+      <UnorderedListOutlined />,
+    ];
+
+    return (
+      <Layout>
+        <Sider trigger={null} collapsible collapsed={this.state.siderCollapsed}>
+          <div className="logo" />
+          <Menu
+            defaultOpenKeys={["sub1"]}
+            mode="inline"
+            theme="dark"
+            inlineCollapsed={this.state.siderCollapsed}
+          >
+            <SubMenu
+              disabled={isSorting}
+              key="sub1"
+              icon={<SortAscendingOutlined />}
+              title={sortMethod}
+            >
+              {sorts.map((item, index) =>
+                sortMethod !== item ? (
+                  <Menu.Item
+                    key={index}
+                    disabled={isSorting}
+                    onClick={this.onSortMethodChange}
+                  >
+                    {item}
+                  </Menu.Item>
+                ) : (
+                  ""
+                )
+              )}
+            </SubMenu>
+
+            {NavbarButtons.map((menuItem, index) => (
+              <Menu.Item
+                className={menuItem["title"]}
+                key={index + 6}
+                icon={icons[index]}
+                onClick={classMethods[index]}
+                disabled={isSorting === menuItem["disabled"] && index !== 2}
+              >
+                {menuItem["title"]}
+              </Menu.Item>
+            ))}
+          </Menu>
+        </Sider>
+        <Layout className="site-layout">
+          <Header className="site-layout-background">
+            {React.createElement(
+              this.state.siderCollapsed ? MenuUnfoldOutlined : MenuFoldOutlined,
+              {
+                className: "trigger",
+                onClick: this.toggleSider,
+              }
+            )}
+            <Button
+              className="header-buttons"
+              type="primary"
+              onClick={this.handleSingleSort}
+              disabled={isSorting}
+            >
+              Sort
+            </Button>
+            <Button
+              className="header-buttons"
+              type="primary"
+              disabled={!isSorting}
+            >
+              Stop
+            </Button>
+          </Header>
+
           <Content className="array-container" style={{ padding: "0 50px" }}>
             {array.map((value, index) => (
               <div
@@ -223,76 +315,32 @@ export default class Visual extends Component {
                 style={{
                   backgroundColor: `${COLOR1}`,
                   height: `${value}px`,
-                  width: `${Math.min(50, 800 / size)}px`,
+                  width: `${Math.min(10, 800 / size)}px`,
                 }}
               ></div>
             ))}
           </Content>
 
-          <CustomizeArrayDrawer
-            size={size}
-            min_value={min_value}
-            max_value={max_value}
-            sortMethod={sortMethod}
-            animation_speed={animation_speed}
-            visible={isDrawerVisible}
-            onClose={this.onClose}
-            handleValueChange={this.handleValueChange}
-            handleSizeChange={this.handleSizeChange}
-            onSortMethodChange={this.onSortMethodChange}
-            handleAnimationSpeedChange={this.handleAnimationSpeedChange}
-          />
-        </Layout>
+          {/************************************ SHOW LOG **********************************/}
 
-        <Layout>
-          <div className="site-statistic-demo-card">
-            <Row gutter={16}>
-              <Col span={6}>
-                <Card>
-                  <Statistic
-                    title="Sort Algorithm"
-                    value={sortMethod}
-                    valueStyle={{ color: "#3f8600" }}
-                  />
-                </Card>
-              </Col>
-              <Col span={6}>
-                <Card>
-                  <Statistic
-                    title="Time Complexity"
-                    value={complexity[sortMethod]}
-                    valueStyle={{ color: "#cf1322" }}
-                  />
-                </Card>
-              </Col>
-              <Col span={6}>
-                <Card>
-                  <Statistic
-                    title="Array Size"
-                    value={size}
-                    valueStyle={{ color: "#3f8600" }}
-                  />
-                </Card>
-              </Col>
-              <Col span={6}>
-                <Card>
-                  <Statistic
-                    title="Animation Speed"
-                    value={animation_speed}
-                    valueStyle={{ color: "#3f4200" }}
-                    prefix={<ArrowUpOutlined />}
-                    suffix="ms"
-                  />
-                </Card>
-              </Col>
-            </Row>
-          </div>
+          <Content className="log-container">
+            <Log
+              disabled={isSorting}
+              log={log}
+              handleMultipleSort={this.handleMultipleSort}
+              clearLog={this.clearLog}
+            />
+          </Content>
+
+          {/*****************************  CUSTOMIZE ARRAY DRAWER **********************************/}
+
+          <CustomizeArrayDrawer
+            data={displayValue.slice(2)}
+            onClose={this.toggleDrawer}
+            methods={classMethods.slice(3)}
+          />
         </Layout>
       </Layout>
     );
   }
-}
-
-function randomIntFromInterval(min, max) {
-  return Math.floor(Math.random() * (max - min + 1) + min);
 }

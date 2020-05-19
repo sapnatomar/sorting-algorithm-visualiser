@@ -2,6 +2,7 @@ import bubbleSort from "./BubbleSort";
 import selectionSort from "./SelectionSort";
 import insertionSort from "./InsertionSort";
 import quickSort from "./QuickSort";
+import mergeSort from "./MergeSort";
 // import mergeSort from "./MergeSort";
 // import heapSort from "./HeapSort";
 
@@ -15,6 +16,7 @@ export default function sortArray(array, type) {
   } else if (type === "Insertion Sort") {
     insertionSort(auxillaryArray, actions);
   } else if (type === "Merge Sort") {
+    mergeSort(auxillaryArray, 0, array.length - 1, array.slice(), actions);
   } else if (type === "Quick Sort") {
     quickSort(auxillaryArray, 0, array.length - 1, actions);
   } else {
