@@ -20,8 +20,16 @@ aside .logo {
   margin: 16px;
 }
 
-.ant-menu-dark.ant-menu-dark:not(.ant-menu-horizontal) .ant-menu-item-selected {
+.ant-menu-dark.ant-menu-dark:not(.ant-menu-horizontal) .Generate,
+.ant-menu-dark.ant-menu-dark:not(.ant-menu-horizontal) .Customize,
+.ant-menu-dark.ant-menu-dark:not(.ant-menu-horizontal) .Tips {
   background-color: transparent !important;
+}
+
+.activeSort {
+  background-color: teal !important;
+  color: #fff !important;
+  font-weight: 600;
 }
 
 header .trigger {
@@ -41,6 +49,12 @@ header {
   padding: 0 10px 0 10px !important;
   margin-left: 0.5em;
   margin-right: 0.5em;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19) !important;
+  font-weight: 600 !important;
+}
+
+.header-buttons:disabled {
+  color: #1890ff !important;
 }
 
 @media screen and (min-width: 600px) {
@@ -109,6 +123,10 @@ header {
   cursor: pointer;
 }
 
+.log-conatiner {
+  margin-bottom: 4em;
+}
+
 @media screen and (max-width: 600px) {
   .array-bar {
     max-width: 2px !important;
@@ -120,5 +138,46 @@ header {
 }
 
 .ant-table-thead {
-  display: none !important;
+  /* display: none !important; */
+  font-weight: 600;
+}
+
+.array-details button,
+.array-details button:active,
+.array-details button:hover,
+.array-details button:focus {
+  height: auto;
+  border: none;
+  color: rgba(0, 0, 0, 0.65) !important;
+  /* box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19) !important; */
+  cursor: default;
+}
+
+.array-details .array-details-value {
+  font-size: x-large;
+}
+
+@media screen and (max-width: 1024px) {
+  .array-details button,
+  .array-details .array-details-value {
+    font-size: x-small;
+  }
+  .log-container {
+    display: none;
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .array-details {
+    display: none;
+  }
+}
+
+.ant-table-footer,
+.ant-table-cell {
+  padding: 8px 16px !important;
+}
+
+.ant-table-footer {
+  text-align: right;
 }

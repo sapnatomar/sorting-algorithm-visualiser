@@ -11,44 +11,17 @@ export const sorts = [
 ];
 
 export const complexity = {
-  "Bubble Sort": "O(n2)",
-  "Selection Sort": "O(n2)",
-  "Insertion Sort": "O(n2)",
-  "Merge Sort": "O(nlog(n))",
-  "Quick Sort": "O(nlog(n))",
-  "Heap Sort": "O(nlog(n))",
+  "Bubble Sort": "O(n*n)",
+  "Selection Sort": "O(n*n)",
+  "Insertion Sort": "O(n*n)",
+  "Merge Sort": "O(n*log(n))",
+  "Quick Sort": "O(n*log(n))",
+  "Heap Sort": "O(n*log(n))",
 };
 
 export function randomIntFromInterval(min, max) {
   return Math.floor(Math.random() * (max - min + 1) + min);
 }
-
-export const arrayDetails = [
-  {
-    title: "Sort Agorithm",
-    valueStyle: { color: "#3f8600" },
-  },
-  {
-    title: "Time Complexity",
-    valueStyle: { color: "#cf1322" },
-  },
-  {
-    title: "Animation Speed",
-    valueStyle: { color: "#3f4200" },
-  },
-  {
-    title: "Array Size",
-    valueStyle: { color: "#3f8600" },
-  },
-  {
-    title: "Minimum Value Limit",
-    valueStyle: { color: "#3f8600" },
-  },
-  {
-    title: "Maximum Value Limit",
-    valueStyle: { color: "#3f8600" },
-  },
-];
 
 export const NavbarButtons = [
   {
@@ -60,16 +33,34 @@ export const NavbarButtons = [
     disabled: true,
   },
   {
-    title: "Instructions",
+    title: "Tips",
   },
-  // {
-  //   title: "Sort",
-  //   type: "primary",
-  //   disabled: true,
-  // },
-  // {
-  //   title: "Stop (BROKEN)",
-  //   type: "primary",
-  //   disabled: false,
-  // },
+];
+
+export const columns = [
+  {
+    title: "Sort",
+    dataIndex: "sort",
+    align: "center",
+  },
+  {
+    title: "Complexity",
+    dataIndex: "complexity",
+    align: "center",
+  },
+  {
+    title: "N (Size)",
+    dataIndex: "N",
+    align: "center",
+  },
+  {
+    title: "Animation Speed(ms)",
+    dataIndex: "animationSpeed",
+    align: "center",
+  },
+  {
+    title: "Time(ms)",
+    dataIndex: "timetaken",
+    align: "center",
+  },
 ];

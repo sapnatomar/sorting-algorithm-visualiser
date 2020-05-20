@@ -3,14 +3,14 @@ import selectionSort from "./SelectionSort";
 import insertionSort from "./InsertionSort";
 import quickSort from "./QuickSort";
 import mergeSort from "./MergeSort";
-// import mergeSort from "./MergeSort";
-// import heapSort from "./HeapSort";
+import heapSort from "./HeapSort";
 
-export default function sortArray(array, type) {
+export default function sortArray(array, type, sortOrder) {
   const actions = [];
   const auxillaryArray = array.slice();
 
   if (type === "Heap Sort") {
+    heapSort(auxillaryArray, actions);
   } else if (type === "Selection Sort") {
     selectionSort(auxillaryArray, actions);
   } else if (type === "Insertion Sort") {
@@ -24,7 +24,7 @@ export default function sortArray(array, type) {
   }
 
   const A = auxillaryArray;
-  const B = array.slice().sort((a, b) => a - b);
+  const B = array.slice().sort((a, b) => (a - b) * sortOrder);
   console.log("Sorted?", arraysAreEqual(A, B));
   return actions;
 }

@@ -1,17 +1,25 @@
 import React, { Component } from "react";
 
-import { Drawer, Form, Col, Row, Slider } from "antd";
+import { Drawer, Form, Col, Row, Slider, Radio } from "antd";
 
 export class CustomizeArrayDrawer extends Component {
   render() {
     const { data, onClose, methods } = this.props;
 
-    const [animation_speed, size, min_value, max_value, visible] = data;
+    const [
+      animation_speed,
+      size,
+      min_value,
+      max_value,
+      visible,
+      sort_order,
+    ] = data;
 
     const [
       handleValueChange,
       handleSizeChange,
       handleAnimationSpeedChange,
+      handleSortOrderChange,
     ] = methods;
 
     return (
@@ -76,6 +84,24 @@ export class CustomizeArrayDrawer extends Component {
                   onChange={handleAnimationSpeedChange}
                   onMouseUp={handleAnimationSpeedChange}
                 />
+              </Form.Item>
+            </Col>
+          </Row>
+
+          <Row gutter={16}>
+            <Col span={24}>
+              <Form.Item
+                name="sort_order"
+                label="Sort by order"
+                initialValue={sort_order}
+              >
+                <Radio.Group
+                  onChange={handleSortOrderChange}
+                  value={sort_order}
+                >
+                  <Radio value={1}>Ascending</Radio>
+                  <Radio value={-1}>Descending</Radio>
+                </Radio.Group>
               </Form.Item>
             </Col>
           </Row>
