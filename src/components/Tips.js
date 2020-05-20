@@ -23,9 +23,9 @@ export default function Tips(props) {
           minimum height, maximum height) and animation speed (default = 3 ms).
         </li>
         <li>
-          For shorter wait time, try using smaller size array for Sorting
-          Algorithms of complexity O(n2). [Bubble Sort, Selection Sort and
-          Insertion Sort]
+          For Sorting Algorithms of complexity O(n2). [Bubble Sort, Selection
+          Sort and Insertion Sort], try using smaller size array and short
+          animation time (~1 ms) for shorter wait time.
           <br />
           Read more about Time Complexities of various Sorting Algorithms{" "}
           <a href={link} target="_blank" rel="noopener noreferrer">

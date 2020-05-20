@@ -10,17 +10,24 @@ export default function sortArray(array, type, sortOrder) {
   const auxillaryArray = array.slice();
 
   if (type === "Heap Sort") {
-    heapSort(auxillaryArray, actions);
+    heapSort(auxillaryArray, actions, sortOrder);
   } else if (type === "Selection Sort") {
-    selectionSort(auxillaryArray, actions);
+    selectionSort(auxillaryArray, actions, sortOrder);
   } else if (type === "Insertion Sort") {
-    insertionSort(auxillaryArray, actions);
+    insertionSort(auxillaryArray, actions, sortOrder);
   } else if (type === "Merge Sort") {
-    mergeSort(auxillaryArray, 0, array.length - 1, array.slice(), actions);
+    mergeSort(
+      auxillaryArray,
+      0,
+      array.length - 1,
+      array.slice(),
+      actions,
+      sortOrder
+    );
   } else if (type === "Quick Sort") {
-    quickSort(auxillaryArray, 0, array.length - 1, actions);
+    quickSort(auxillaryArray, 0, array.length - 1, actions, sortOrder);
   } else {
-    bubbleSort(auxillaryArray, actions);
+    bubbleSort(auxillaryArray, actions, sortOrder);
   }
 
   const A = auxillaryArray;

@@ -10,12 +10,22 @@ import {
   NavbarButtons,
   columns,
 } from "./Utils/utils.js";
-
 import sortArray from "../algorithms/Sort.js";
+
+/***************************************************************************************************************************************************
+ *                                                                      CSS & ANT DESIGN IMPORTS
+ *****************************************************************************************************************************************************/
 
 import "./Visualizer.css";
 import "antd/dist/antd.css";
-import { Layout, Button, notification, Menu, Table, Affix } from "antd";
+import {
+  Layout,
+  Button,
+  notification,
+  Menu,
+  Table,
+  //Affix
+} from "antd";
 import {
   MenuUnfoldOutlined,
   MenuFoldOutlined,
@@ -30,13 +40,19 @@ import {
 const { Header, Sider, Content } = Layout;
 const { SubMenu } = Menu;
 
+/********************************************************************************************************************************************************* */
+/**********************************************************************************************************************************************************
+ *                                                                    Class Components starts here
+ **********************************************************************************************************************************************************/
+/******************************************************************************************************************************************************* */
+
 export default class Visualizer extends Component {
   state = {
     array: [],
     size: 100,
-    min_value: 5,
-    max_value: 300,
-    animation_speed: 3,
+    minValue: 5,
+    maxValue: 300,
+    animationTime: 3,
     sortMethod: "Merge Sort",
     isDrawerVisible: false,
     areTipsVisible: false,
@@ -112,21 +128,21 @@ export default class Visualizer extends Component {
   //handler to change range of value of elements in array
   handleValueChange = ([x, y]) => {
     this.setState({
-      min_value: Math.min(x, y),
-      max_value: Math.max(x, y),
+      minValue: Math.min(x, y),
+      maxValue: Math.max(x, y),
     });
 
     this.generateArray();
   };
 
   //handles change in sort method
-  onSortMethodChange = (e) => {
+  handleSortMethodChange = (e) => {
     this.setState({ sortMethod: sorts[e.key] });
   };
 
   //change animation speed
-  handleAnimationSpeedChange = (e) => {
-    this.setState({ animation_speed: e.target.value });
+  handleanimationTimeChange = (e) => {
+    this.setState({ animationTime: e.target.value });
   };
 
   handleSortOrderChange = (e) => {
@@ -139,10 +155,10 @@ export default class Visualizer extends Component {
 
   generateArray = () => {
     const array = [];
-    const { size, min_value, max_value } = this.state;
+    const { size, minValue, maxValue } = this.state;
 
     for (let i = 1; i <= size; i++) {
-      array.push(randomIntFromInterval(min_value, max_value));
+      array.push(randomIntFromInterval(minValue, maxValue));
     }
     this.setState({ array });
   };
@@ -179,7 +195,7 @@ export default class Visualizer extends Component {
 
   animations = (actions, sortMethod) => {
     this.setState({ isSorting: true });
-    const { animation_speed, size } = this.state;
+    const { animationTime, size, sortOrder } = this.state;
 
     for (let i = 0; i < actions.length; i++) {
       const arrayBar = Array.from(document.querySelectorAll(".array-bar"));
@@ -192,18 +208,20 @@ export default class Visualizer extends Component {
           const color = type === 2 ? COLOR1 : COLOR2;
           bar1.style.backgroundColor = color;
           bar2.style.backgroundColor = color;
-        }, i * animation_speed);
+        }, i * animationTime);
       } else {
         setTimeout(() => {
           bar1.style.height = `${y}px`;
-        }, i * animation_speed);
+        }, i * animationTime);
       }
     }
 
-    const sorting_time = animation_speed * actions.length;
+    const sortingTime = animationTime * actions.length;
 
     setTimeout(() => {
-      const messageDescription = `Took ${sorting_time} milliseconds to sort an array of size ${size} using ${sortMethod} with animation speed of ${animation_speed} ms.`;
+      const messageDescription = `Took ${sortingTime} milliseconds to sort an array of size 
+                                  ${size} using ${sortMethod} with animation speed of 
+                                  ${animationTime} ms.`;
       this.openNotification(messageDescription);
       this.setState({
         isSorting: false,
@@ -213,23 +231,28 @@ export default class Visualizer extends Component {
             key: this.state.log.length,
             sort: sortMethod,
             complexity: complexity[sortMethod],
-            animationSpeed: animation_speed,
+            order: sortOrder === 1 ? "Ascending" : "Descending",
+            animationTime: animationTime,
             N: size,
-            timetaken: sorting_time,
+            timetaken: sortingTime,
           },
         ],
       });
-    }, parseInt(sorting_time));
+    }, parseInt(sortingTime));
   };
+
+  /******************************************************************************************************************************************************
+   *                                                                  RENDER function
+   ********************************************************************************************************************************************************/
 
   render() {
     const {
       array,
       size,
-      min_value,
-      max_value,
+      minValue,
+      maxValue,
       sortMethod,
-      animation_speed,
+      animationTime,
       isDrawerVisible,
       areTipsVisible,
       isSorting,
@@ -240,10 +263,10 @@ export default class Visualizer extends Component {
     const displayValue = [
       sortMethod,
       complexity[sortMethod],
-      animation_speed,
+      animationTime,
       size,
-      min_value,
-      max_value,
+      minValue,
+      maxValue,
       isDrawerVisible,
       sortOrder,
     ];
@@ -254,7 +277,7 @@ export default class Visualizer extends Component {
       this.toggleTips,
       this.handleValueChange,
       this.handleSizeChange,
-      this.handleAnimationSpeedChange,
+      this.handleanimationTimeChange,
       this.handleSortOrderChange,
     ];
 
@@ -287,7 +310,7 @@ export default class Visualizer extends Component {
                   title={`Time Complexity: ${complexity[item]}`}
                   key={index}
                   disabled={isSorting}
-                  onClick={this.onSortMethodChange}
+                  onClick={this.handleSortMethodChange}
                   className={item === sortMethod ? "activeSort" : ""}
                 >
                   {item}
@@ -360,7 +383,7 @@ export default class Visualizer extends Component {
               dataSource={log.slice().reverse()}
               pagination={false}
               bordered
-              style={{ maxWidth: "45em", margin: "0 auto" }}
+              style={{ maxWidth: "50em", margin: "0 auto" }}
               scroll={{ y: 235 }}
               footer={() => this.footer()}
             />
@@ -379,7 +402,7 @@ export default class Visualizer extends Component {
               <Button>
                 ANIMATION SPEED{" "}
                 <span className="array-details-value">
-                  | {animation_speed} ms
+                  | {animationTime} ms
                 </span>
               </Button>
             </Affix>
@@ -390,12 +413,12 @@ export default class Visualizer extends Component {
             </Affix>
             <Affix offsetBottom={2 * pos}>
               <Button>
-                MIN <span className="array-details-value">| {min_value}</span>
+                MIN <span className="array-details-value">| {minValue}</span>
               </Button>
             </Affix>
             <Affix offsetBottom={pos}>
               <Button>
-                MAX <span className="array-details-value">| {max_value}</span>
+                MAX <span className="array-details-value">| {maxValue}</span>
               </Button>
             </Affix>
           </div> */}

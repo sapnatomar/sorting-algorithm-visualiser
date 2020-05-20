@@ -1,3 +1,5 @@
+let sortOrder;
+
 function swap(array, i, j, actions) {
   actions.push([1, i, array[j]]);
   actions.push([1, j, array[i]]);
@@ -9,29 +11,50 @@ function swap(array, i, j, actions) {
 
 function heapify(array, n, i, actions) {
   let largest = i;
+  let smallest = i;
   let left = 2 * i + 1;
   let right = 2 * i + 2;
 
-  if (left < n && array[left] > array[largest]) {
-    actions.push([0, left, largest]);
-    actions.push([2, left, largest]);
-    largest = left;
+  if (left < n) {
+    if (sortOrder === 1 && array[left] > array[largest]) {
+      actions.push([0, left, largest]);
+      actions.push([2, left, largest]);
+      largest = left;
+    }
+    if (sortOrder === -1 && array[left] < array[smallest]) {
+      actions.push([0, left, smallest]);
+      actions.push([2, left, smallest]);
+      smallest = left;
+    }
   }
 
-  if (right < n && array[right] > array[largest]) {
-    actions.push([0, right, largest]);
-    actions.push([2, right, largest]);
-    largest = right;
+  if (right < n) {
+    if (sortOrder === 1 && array[right] > array[largest]) {
+      actions.push([0, right, largest]);
+      actions.push([2, right, largest]);
+      largest = right;
+    }
+
+    if (sortOrder === -1 && array[right] < array[smallest]) {
+      actions.push([0, right, smallest]);
+      actions.push([2, right, smallest]);
+      smallest = right;
+    }
   }
 
-  if (largest !== i) {
+  if (sortOrder === 1 && largest !== i) {
     swap(array, i, largest, actions);
     heapify(array, n, largest, actions);
   }
+  if (sortOrder === -1 && smallest !== i) {
+    swap(array, i, smallest, actions);
+    heapify(array, n, smallest, actions);
+  }
 }
 
-export default function heapSort(array, actions) {
+export default function heapSort(array, actions, sort_order) {
   const n = array.length;
+  sortOrder = sort_order;
 
   for (let i = n / 2 - 1; i >= 0; i--) {
     heapify(array, n, i, actions);

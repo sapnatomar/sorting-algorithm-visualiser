@@ -1,3 +1,5 @@
+let sortOrder;
+
 function merge(array, low, mid, high, helperArray, actions) {
   let i = low;
   let k = low;
@@ -5,7 +7,7 @@ function merge(array, low, mid, high, helperArray, actions) {
 
   while (i <= mid && j <= high) {
     actions.push([0, i, j]);
-    if (helperArray[i] <= helperArray[j]) {
+    if ((helperArray[i] - helperArray[j]) * sortOrder < 0) {
       actions.push([1, k, helperArray[i]]);
       actions.push([2, i, j]);
       array[k++] = helperArray[i++];
@@ -31,13 +33,23 @@ function merge(array, low, mid, high, helperArray, actions) {
   }
 }
 
-function mergeSort(array, low, high, helperArray, actions) {
+function performMergeSort(array, low, high, helperArray, actions) {
   if (low < high) {
     const mid = Math.floor((low + high) / 2);
-    mergeSort(helperArray, low, mid, array, actions);
-    mergeSort(helperArray, mid + 1, high, array, actions);
+    performMergeSort(helperArray, low, mid, array, actions);
+    performMergeSort(helperArray, mid + 1, high, array, actions);
     merge(array, low, mid, high, helperArray, actions);
   }
 }
 
-export default mergeSort;
+export default function mergeSort(
+  array,
+  low,
+  high,
+  helperArray,
+  actions,
+  sort_order
+) {
+  sortOrder = sort_order;
+  performMergeSort(array, low, high, helperArray, actions);
+}

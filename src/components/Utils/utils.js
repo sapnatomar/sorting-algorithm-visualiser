@@ -54,8 +54,13 @@ export const columns = [
     align: "center",
   },
   {
+    title: "Order",
+    dataIndex: "order",
+    align: "center",
+  },
+  {
     title: "Animation Speed(ms)",
-    dataIndex: "animationSpeed",
+    dataIndex: "animationTime",
     align: "center",
   },
   {

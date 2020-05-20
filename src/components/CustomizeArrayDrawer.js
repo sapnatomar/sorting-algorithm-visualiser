@@ -6,19 +6,12 @@ export class CustomizeArrayDrawer extends Component {
   render() {
     const { data, onClose, methods } = this.props;
 
-    const [
-      animation_speed,
-      size,
-      min_value,
-      max_value,
-      visible,
-      sort_order,
-    ] = data;
+    const [animationTime, size, minValue, maxValue, visible, sortOrder] = data;
 
     const [
       handleValueChange,
       handleSizeChange,
-      handleAnimationSpeedChange,
+      handleanimationTimeChange,
       handleSortOrderChange,
     ] = methods;
 
@@ -52,7 +45,7 @@ export class CustomizeArrayDrawer extends Component {
               <Form.Item
                 name="value_range"
                 label="Range of Array values"
-                initialValue={[min_value, max_value]}
+                initialValue={[minValue, maxValue]}
               >
                 <Slider
                   range
@@ -69,20 +62,20 @@ export class CustomizeArrayDrawer extends Component {
           <Row gutter={16}>
             <Col span={24}>
               <Form.Item
-                name="animation_speed"
+                name="animationTime"
                 label="Set Animation Speed"
-                initialValue={animation_speed}
+                initialValue={animationTime}
               >
                 <input
                   type="range"
                   min="1"
                   max="20"
                   step="1"
-                  value={animation_speed}
+                  value={animationTime}
                   className="slider"
-                  onClick={handleAnimationSpeedChange}
-                  onChange={handleAnimationSpeedChange}
-                  onMouseUp={handleAnimationSpeedChange}
+                  onClick={handleanimationTimeChange}
+                  onChange={handleanimationTimeChange}
+                  onMouseUp={handleanimationTimeChange}
                 />
               </Form.Item>
             </Col>
@@ -91,14 +84,11 @@ export class CustomizeArrayDrawer extends Component {
           <Row gutter={16}>
             <Col span={24}>
               <Form.Item
-                name="sort_order"
+                name="sortOrder"
                 label="Sort by order"
-                initialValue={sort_order}
+                initialValue={sortOrder}
               >
-                <Radio.Group
-                  onChange={handleSortOrderChange}
-                  value={sort_order}
-                >
+                <Radio.Group onChange={handleSortOrderChange} value={sortOrder}>
                   <Radio value={1}>Ascending</Radio>
                   <Radio value={-1}>Descending</Radio>
                 </Radio.Group>

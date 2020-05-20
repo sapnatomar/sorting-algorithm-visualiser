@@ -1,3 +1,5 @@
+let sortOrder;
+
 function swap(array, i, j, actions) {
   actions.push([1, i, array[j]]);
   actions.push([1, j, array[i]]);
@@ -8,19 +10,25 @@ function swap(array, i, j, actions) {
 }
 
 function partition(array, low, high, actions) {
-  //const randomIndex = Math.floor(Math.random() * (high - low + 1) + low);
-  //swap(array, low, low + randomIndex, actions);
+  // const randomIndex = Math.floor(Math.random() * (high - low + 1) + low);
+  // swap(array, low, low + randomIndex, actions);
   const pivot = array[low];
   let i = low;
   let j = high;
 
   while (i < j) {
-    while (array[i] <= pivot) {
+    while (
+      (sortOrder === 1 && array[i] <= pivot) ||
+      (sortOrder === -1 && array[i] >= pivot)
+    ) {
       actions.push([0, low, i]);
       actions.push([2, low, i]);
       i++;
     }
-    while (array[j] > pivot) {
+    while (
+      (sortOrder === 1 && array[j] > pivot) ||
+      (sortOrder === -1 && array[j] < pivot)
+    ) {
       actions.push([0, low, j]);
       actions.push([2, low, j]);
       j--;
@@ -39,12 +47,15 @@ function partition(array, low, high, actions) {
   return j;
 }
 
-function quickSort(array, low, high, actions) {
+function performQuickSort(array, low, high, actions) {
   if (low < high) {
     const partitionIndex = partition(array, low, high, actions);
-    quickSort(array, low, partitionIndex - 1, actions);
-    quickSort(array, partitionIndex + 1, high, actions);
+    performQuickSort(array, low, partitionIndex - 1, actions);
+    performQuickSort(array, partitionIndex + 1, high, actions);
   }
 }
 
-export default quickSort;
+export default function quickSot(array, low, high, actions, sort_order) {
+  sortOrder = sort_order;
+  performQuickSort(array, low, high, actions);
+}
