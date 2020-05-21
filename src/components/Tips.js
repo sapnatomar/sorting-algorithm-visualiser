@@ -20,7 +20,8 @@ export default function Tips(props) {
       <ul>
         <li>
           Customize Array to change the properties of array bars (number,
-          minimum height, maximum height) and animation speed (default = 3 ms).
+          minimum height, maximum height), animation time (default = 3 ms) 
+          and order of sorting.
         </li>
         <li>
           For Sorting Algorithms of complexity O(n2). [Bubble Sort, Selection
