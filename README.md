@@ -1,5 +1,5 @@
 ## Sorting Algorithms Visualizer
-Visualisation of various Sorting Algorithms (Bubble Sort, Insertion Sort, Selection Sort, Quick Sort, Merge Sort, Heap Sort) built using React Js and Ant Design. See the live demo (here)[https://zealous-curie-486d7b.netlify.app/] (Best viewed in Google Chrome)
+Visualisation of various Sorting Algorithms (Bubble Sort, Insertion Sort, Selection Sort, Quick Sort, Merge Sort, Heap Sort) built using React Js and Ant Design. See the live demo [here](https://zealous-curie-486d7b.netlify.app/). (Best viewed in Google Chrome)
 
 ## Setup
 Clone the project into local. <br />
